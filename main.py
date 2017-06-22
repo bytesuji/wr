@@ -17,7 +17,7 @@ colorama.init()
 
 
 def default():
-    api_url = handle_loc_type()
+    api_url = generate_url()
     json_str = urlopen(api_url).read().decode()
     json_dict = json.loads(json_str)
     weekday = datetime.datetime.today().weekday()
@@ -51,7 +51,20 @@ def default():
 
 
 def hourly():
-    pass        
+    api_url = generate_url(forecast=Weather.HOURLY)
+    print(api_url)
+    json_str = urlopen(api_url).read().decode()
+    print(json_str)
+    json_dict = json.loads(json_str)
+    weekday = datetime.datetime.today().weekday()
+
+    expl_string = Style.BRIGHT + "Week" + Style.RESET_ALL + "       │ " + Style.BRIGHT + \
+        "Temp" + Style.RESET_ALL + "  │ " + Style.BRIGHT + "Info" + Style.RESET_ALL
+
+    print()
+    if '--show-loc' in sys.argv:
+        print(Style.BRIGHT + json_dict['city']['name'] + Style.RESET_ALL + '\n')
+    # print(expl_string)
 
 
 def main():
@@ -69,7 +82,6 @@ def main():
         hourly()
     else:
         default()
-
 
 
 if __name__ == '__main__':

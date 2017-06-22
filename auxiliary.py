@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+from enum import Enum
 import colorama
 from colorama import Fore
 os.chdir('/opt/wr')
 import joblib
 
 colorama.init()
+
+
+class Weather(Enum):
+    DAILY = 0
+    HOURLY = 1
+    ASTRO = 2
 
 
 API_URL_COORD = \
@@ -66,24 +73,61 @@ def date_indexer(day_num):
     return day_names[day_num]
 
 
-def handle_loc_type():
+def load_settings():
+    homedir = os.path.expanduser('~') # TODO place this in /opt
+    wrrc = homedir + '/.wrrc'
+
+    settings = joblib.load(wrrc)
+    return settings
+
+
+def generate_url(forecast=Weather.DAILY):
+    print(forecast)
     homedir = os.path.expanduser('~')
     wrrc = homedir + '/.wrrc'
 
-    if '--coords' in sys.argv:
-        (lat, lon) = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
-        api_url = API_URL_COORD.format(lat, lon)
-    elif '--zip' in sys.argv:
-        zipcode = sys.argv[sys.argv.index('--zip') + 1]
-        api_url = API_URL_ZIP.format(zipcode)
-    elif os.path.exists(wrrc):
-        api_url = joblib.load(wrrc)
-    else:
-        print("Error: User must specify either --zip or --coords!")
-        exit(-1)
+    if forecast is Weather.DAILY:
+        if '--coords' in sys.argv:
+            (lat, lon) = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
+            api_url = API_URL_COORD.format(lat, lon)
+        elif '--zip' in sys.argv:
+            zipcode = sys.argv[sys.argv.index('--zip') + 1]
+            api_url = API_URL_ZIP.format(zipcode)
+        elif os.path.exists(wrrc):
+            settings = load_settings()
+            if settings[0] == 'COORDS':
+                api_url = API_URL_COORD.format(settings[1][0], settings[1][1])
+            elif settings[0] == 'ZIP':
+                api_url = API_URL_ZIP.format(settings[1])
+        else:
+            print("Error: User must specify either --zip or --coords!")
+            exit(-1)
+
+    elif forecast is Weather.HOURLY:
+        if '--coords' in sys.argv:
+            (lat, lon) = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
+            api_url = API_URL_HOURLY_COORD.format(lat, lon)
+        elif '--zip' in sys.argv:
+            zipcode = sys.argv[sys.argv.index('--zip') + 1]
+            api_url = API_URL_HOURLY_ZIP.format(zipcode)
+        elif os.path.exists(wrrc):
+            settings = load_settings()
+            if settings[0] == 'COORDS':
+                api_url = API_URL_HOURLY_COORD.format(settings[1][0], settings[1][1])
+            elif settings[0] == 'ZIP':
+                api_url = API_URL_HOURLY_ZIP.format(settings[1])
+        else:
+            print("Error: User must specify either --zip or --coords!")
+            exit(-1)
+
     if '--save' in sys.argv:
-        joblib.dump(api_url, wrrc)
+        if '--coords' in sys.argv:
+            loc_type = 'COORDS'
+            loc = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
+        elif '--zip' in sys.argv:
+            loc_type = 'ZIP'
+            loc = sys.argv[sys.argv.index('--zip') + 1]
+        settings = (loc_type, loc)
+        joblib.dump(settings, wrrc)
 
     return api_url
-
-
