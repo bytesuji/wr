@@ -20,7 +20,7 @@ def main():
     print("Checking dependencies...")
     try:
         import colorama
-    except ModuleNotFoundError:
+    except ImportError, ModuleNotFoundError:
         print("Required module [colorama] was not found. Installing via pip.")
         install('colorama')
 
