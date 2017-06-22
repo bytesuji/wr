@@ -17,8 +17,7 @@ class Weather(Enum):
 
 
 API_URL_COORD = \
-    'http://api.openweathermap.org/data/2.5/forecast/daily?lat={}&lon={}&cnt=10&\
-    APPID=a42e83259c77ea994ccc6891cdf13525'
+    'http://api.openweathermap.org/data/2.5/forecast/daily?lat={}&lon={}&cnt=10&APPID=a42e83259c77ea994ccc6891cdf13525'
 API_URL_ZIP = \
     'http://api.openweathermap.org/data/2.5/forecast/daily?zip={},us&APPID=a42e83259c77ea994ccc6891cdf13525'
 API_URL_HOURLY_ZIP = \
