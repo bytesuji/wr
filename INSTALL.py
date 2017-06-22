@@ -9,6 +9,7 @@ class PrivilegeException(Exception):
     def __str__(self):
         return str(self.paramater)
 
+
 def install(package):
     pip.main(['install', package])
 
@@ -34,3 +35,7 @@ def main():
     print("Creating symlink...")
     os.symlink('/opt/wr/main.py', '/usr/local/bin/wr')
     print("Successfully installed!")
+
+
+if __name__ == '__main__':
+    main()
