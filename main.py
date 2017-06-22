@@ -13,36 +13,11 @@ os.chdir('/opt/wr')
 import joblib
 from auxiliary import *
 
-API_URL_COORD = \
-    'http://api.openweathermap.org/data/2.5/forecast/daily?lat={}&lon={}&cnt=10&\
-    APPID=a42e83259c77ea994ccc6891cdf13525'
-API_URL_ZIP = \
-    'http://api.openweathermap.org/data/2.5/forecast/daily?zip={},us&APPID=a42e83259c77ea994ccc6891cdf13525'
-
 colorama.init()
 
 
-def main():
-    homedir = os.path.expanduser('~')
-    wrrc = homedir + '/.wrrc'
-    if '--coords' in sys.argv:
-        (lat, lon) = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
-        api_url = API_URL_COORD.format(lat, lon)
-
-        if '--save-loc' in sys.argv:
-            joblib.dump(api_url, wrrc)
-    elif '--zip' in sys.argv:
-        zipcode = sys.argv[sys.argv.index('--zip') + 1]
-        api_url = API_URL_ZIP.format(zipcode)
-
-        if '--save-loc' in sys.argv:
-            joblib.dump(api_url, wrrc)
-    elif os.path.exists(wrrc):
-        api_url = joblib.load(wrrc)
-    else:
-        print("Error: User must specify either --zip or --coords!")
-        exit(-1)
-
+def default():
+    api_url = handle_loc_type()
     json_str = urlopen(api_url).read().decode()
     json_dict = json.loads(json_str)
     weekday = datetime.datetime.today().weekday()
@@ -73,6 +48,28 @@ def main():
         print('─' * 11, '┼', '─' * 7, '┼', '─' * 23, sep='')
         print(date_indexer((weekday + i) % 6), temp_string + description)
     print()
+
+
+def hourly():
+    pass        
+
+
+def main():
+    if '--help' in sys.argv:
+        print("""
+-f            displays temps in fahrenheit
+--today       displays the three-hourly forecast for the day
+--zip         specifiy location with ZIP code
+--coords      or with lat/lon
+--save        saves the location and forecast type specified so you don't have to enter it again
+--show-loc    shows the name of the city along with the weather report
+        """)
+        exit(0)
+    if '--hourly' in sys.argv:
+        hourly()
+    else:
+        default()
+
 
 
 if __name__ == '__main__':

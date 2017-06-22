@@ -1,7 +1,24 @@
 # -*- coding: utf-8 -*-
+import os
+import sys
 import colorama
 from colorama import Fore
+os.chdir('/opt/wr')
+import joblib
+
 colorama.init()
+
+
+API_URL_COORD = \
+    'http://api.openweathermap.org/data/2.5/forecast/daily?lat={}&lon={}&cnt=10&\
+    APPID=a42e83259c77ea994ccc6891cdf13525'
+API_URL_ZIP = \
+    'http://api.openweathermap.org/data/2.5/forecast/daily?zip={},us&APPID=a42e83259c77ea994ccc6891cdf13525'
+API_URL_HOURLY_ZIP = \
+    'http://api.openweathermap.org/data/2.5/forecast?zip={},us&APPID=a42e83259c77ea994ccc6891cdf13525'
+API_URL_HOURLY_COORD = \
+    'http://api.openweathermap.org/data/2.5/forecast?lat={}&lon={}&APPID=a42e83259c77ea994ccc6891cdf13525'
+
 
 def convert_kelvin(temp, to='C', rounding=1):
     to = to.lower()
@@ -47,3 +64,26 @@ def date_indexer(day_num):
         "Sunday     │"
     ]
     return day_names[day_num]
+
+
+def handle_loc_type():
+    homedir = os.path.expanduser('~')
+    wrrc = homedir + '/.wrrc'
+
+    if '--coords' in sys.argv:
+        (lat, lon) = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
+        api_url = API_URL_COORD.format(lat, lon)
+    elif '--zip' in sys.argv:
+        zipcode = sys.argv[sys.argv.index('--zip') + 1]
+        api_url = API_URL_ZIP.format(zipcode)
+    elif os.path.exists(wrrc):
+        api_url = joblib.load(wrrc)
+    else:
+        print("Error: User must specify either --zip or --coords!")
+        exit(-1)
+    if '--save' in sys.argv:
+        joblib.dump(api_url, wrrc)
+
+    return api_url
+
+
