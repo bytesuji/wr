@@ -22,6 +22,9 @@ def default():
     json_dict = json.loads(json_str)
     weekday = datetime.datetime.today().weekday()
 
+    descripts = [day['weather'][0]['description'] for day in json_dict['list'][0:9]]
+    max_desc_len = max(map(len, descripts))
+
     expl_string = Style.BRIGHT + "Weekday" + Style.RESET_ALL + "    │ " + Style.BRIGHT + \
         "Temp" + Style.RESET_ALL + "  │ " + Style.BRIGHT + "Info" + Style.RESET_ALL
 
@@ -29,6 +32,7 @@ def default():
     if '--show-loc' in sys.argv:
         print(Style.BRIGHT + json_dict['city']['name'] + Style.RESET_ALL + '\n')
     print(expl_string)
+
     for i, day in zip(range(7), json_dict['list']):
         k_temp = float(day['temp']['day'])
         if '-f' in sys.argv:
@@ -45,7 +49,7 @@ def default():
             temp_string = temp_colorizer(conv_temp) + "°" + (' ' * (5 - len(str(conv_temp)))) + '│ '
         # TODO fix that redundancy
 
-        print('─' * 11, '┼', '─' * 7, '┼', '─' * 23, sep='')
+        print('─' * 11, '┼', '─' * 7, '┼', '─' * (max_desc_len + 5), sep='')
         print(date_indexer((weekday + i) % 6), temp_string + description)
     print()
 
@@ -58,12 +62,14 @@ def hourly():
     expl_string = Style.BRIGHT + "Time" + Style.RESET_ALL + "  │ " + Style.BRIGHT + \
         "Temp" + Style.RESET_ALL + "  │ " + Style.BRIGHT + "Info" + Style.RESET_ALL
 
+    descripts = [day['weather'][0]['description'] for day in json_dict['list'][0:9]]
+    max_desc_len = max(map(len, descripts))
+
     print()
     if '--show-loc' in sys.argv:
         print(Style.BRIGHT + json_dict['city']['name'] + Style.RESET_ALL + '\n')
     print(expl_string)
-    descripts = [day['weather'][0]['description'] for day in json_dict['list']]
-    max_desc_len = max(map(len, descripts))
+
     for day in json_dict['list'][0:9]:
         time = ("%02d" % datetime.datetime.fromtimestamp(day['dt']).hour) + ":00"
 
@@ -80,7 +86,7 @@ def hourly():
         description = day['weather'][0]['description']
         description = description[0].upper() + description[1:]
 
-        print('─' * 6, '┼', '─' * 7, '┼', '─' * (max_desc_len + 2), sep='')
+        print('─' * 6, '┼', '─' * 7, '┼', '─' * (max_desc_len + 5), sep='')
         print(time, " │ ", temp_string, description, sep='')
     print()
 
