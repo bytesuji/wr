@@ -15,6 +15,15 @@ from auxiliary import *
 
 colorama.init()
 
+help_string = """
+-f            displays temps in fahrenheit
+--today       displays the three-hourly forecast for the day
+--zip         specifiy location with ZIP code
+--coords      or with lat/lon
+--save        saves the location and forecast type specified so you don't have to enter it again
+--show-loc    shows the name of the city along with the weather report
+"""
+
 
 def default():
     api_url = generate_url()
@@ -93,14 +102,7 @@ def hourly():
 
 def main():
     if '--help' in sys.argv:
-        print("""
--f            displays temps in fahrenheit
---today       displays the three-hourly forecast for the day
---zip         specifiy location with ZIP code
---coords      or with lat/lon
---save        saves the location and forecast type specified so you don't have to enter it again
---show-loc    shows the name of the city along with the weather report
-        """)
+        print(help_string)
         exit(0)
     if '--today' in sys.argv:
         hourly()
