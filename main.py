@@ -1,3 +1,6 @@
+#!/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 import json
@@ -6,6 +9,7 @@ import colorama
 from colorama import Style
 from urllib.request import urlopen
 
+os.chdir('/home/albert/dev/python/wr')
 import joblib
 from auxiliary import *
 
@@ -43,16 +47,26 @@ def main():
 
     expl_string = Style.BRIGHT + "Weekday" + Style.RESET_ALL + "    │ " + Style.BRIGHT + \
         "Temp" + Style.RESET_ALL + "  │ " + Style.BRIGHT + "Info" + Style.RESET_ALL
+
     print()
+    if '--show-loc' in sys.argv:
+        print(Style.BRIGHT + json_dict['city']['name'] + Style.RESET_ALL + '\n')
     print(expl_string)
     for i, day in zip(range(7), json_dict['list']):
         k_temp = float(day['temp']['day'])
-        conv_temp = convert_kelvin(k_temp)
+        if '-f' in sys.argv:
+            conv_temp = convert_kelvin(k_temp, 'f')
+        else:
+            conv_temp = convert_kelvin(k_temp)
             
         description = day['weather'][0]['description']
         description = description[0].upper() + description[1:]
 
-        temp_string = temp_colorizer(conv_temp) + "°" + (' ' * (5 - len(str(conv_temp)))) + '│ '
+        if '-f' in sys.argv:
+            temp_string = temp_colorizer(conv_temp, 'f') + "°" + (' ' * (5 - len(str(conv_temp)))) + '│ '
+        else:
+            temp_string = temp_colorizer(conv_temp) + "°" + (' ' * (5 - len(str(conv_temp)))) + '│ '
+        # TODO fix that redundancy
 
         print('─' * 11, '┼', '─' * 7, '┼', '─' * 23, sep='')
         print(date_indexer((weekday + i) % 6), temp_string + description)
