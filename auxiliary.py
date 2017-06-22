@@ -82,7 +82,6 @@ def load_settings():
 
 
 def generate_url(forecast=Weather.DAILY):
-    print(forecast)
     homedir = os.path.expanduser('~')
     wrrc = homedir + '/.wrrc'
 

@@ -52,19 +52,38 @@ def default():
 
 def hourly():
     api_url = generate_url(forecast=Weather.HOURLY)
-    print(api_url)
     json_str = urlopen(api_url).read().decode()
-    print(json_str)
     json_dict = json.loads(json_str)
-    weekday = datetime.datetime.today().weekday()
 
-    expl_string = Style.BRIGHT + "Week" + Style.RESET_ALL + "       │ " + Style.BRIGHT + \
+    expl_string = Style.BRIGHT + "Time" + Style.RESET_ALL + "  │ " + Style.BRIGHT + \
         "Temp" + Style.RESET_ALL + "  │ " + Style.BRIGHT + "Info" + Style.RESET_ALL
 
     print()
     if '--show-loc' in sys.argv:
         print(Style.BRIGHT + json_dict['city']['name'] + Style.RESET_ALL + '\n')
-    # print(expl_string)
+    print(expl_string)
+    descripts = [day['weather'][0]['description'] for day in json_dict['list']]
+    max_desc_len = max(map(len, descripts))
+    for day in json_dict['list'][0:9]:
+        time = ("%02d" % datetime.datetime.fromtimestamp(day['dt']).hour) + ":00"
+
+        if '-f' in sys.argv:
+            conv_temp = convert_kelvin(day['main']['temp'], 'f')
+        else:
+            conv_temp = convert_kelvin(day['main']['temp'])
+
+        if '-f' in sys.argv:
+            temp_string = temp_colorizer(conv_temp, 'f') + "°" + (' ' * (5 - len(str(conv_temp)))) + '│ '
+        else:
+            temp_string = temp_colorizer(conv_temp) + "°" + (' ' * (5 - len(str(conv_temp)))) + '│ '
+
+        description = day['weather'][0]['description']
+        description = description[0].upper() + description[1:]
+
+        print('─' * 6, '┼', '─' * 7, '┼', '─' * (max_desc_len + 2), sep='')
+        print(time, " │ ", temp_string, description, sep='')
+    print()
+
 
 
 def main():
