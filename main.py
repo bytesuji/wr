@@ -85,7 +85,6 @@ def hourly():
     print()
 
 
-
 def main():
     if '--help' in sys.argv:
         print("""
@@ -97,7 +96,7 @@ def main():
 --show-loc    shows the name of the city along with the weather report
         """)
         exit(0)
-    if '--hourly' in sys.argv:
+    if '--today' in sys.argv:
         hourly()
     else:
         default()
