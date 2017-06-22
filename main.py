@@ -14,7 +14,8 @@ import joblib
 from auxiliary import *
 
 API_URL_COORD = \
-    'http://api.openweathermap.org/data/2.5/forecast/daily?lat={}&lon={}&cnt=10&APPID=a42e83259c77ea994ccc6891cdf13525'
+    'http://api.openweathermap.org/data/2.5/forecast/daily?lat={}&lon={}&cnt=10&\
+    APPID=a42e83259c77ea994ccc6891cdf13525'
 API_URL_ZIP = \
     'http://api.openweathermap.org/data/2.5/forecast/daily?zip={},us&APPID=a42e83259c77ea994ccc6891cdf13525'
 
@@ -39,7 +40,8 @@ def main():
     elif os.path.exists(wrrc):
         api_url = joblib.load(wrrc)
     else:
-        raise Exception("User must specify either --coords or --zip")
+        print("Error: User must specify either --zip or --coords!")
+        exit(-1)
 
     json_str = urlopen(api_url).read().decode()
     json_dict = json.loads(json_str)
