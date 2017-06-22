@@ -9,7 +9,7 @@ import colorama
 from colorama import Style
 from urllib.request import urlopen
 
-os.chdir('/home/albert/dev/python/wr')
+os.chdir('/opt/wr')
 import joblib
 from auxiliary import *
 
