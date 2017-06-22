@@ -12,12 +12,12 @@ def convert_kelvin(temp, to='C', rounding=1):
 def date_indexer(day_num):
     # returns strigns which are all the same width
     day_names = [
-        "Monday     ",
-        "Tuesday    ",
-        "Wednesday  ",
-        "Thursday   ",
-        "Friday     ",
-        "Saturday   ",
-        "Sunday     "
+        "Monday     │",
+        "Tuesday    │",
+        "Wednesday  │",
+        "Thursday   │",
+        "Friday     │",
+        "Saturday   │",
+        "Sunday     │"
     ]
     return day_names[day_num]
