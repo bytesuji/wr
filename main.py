@@ -41,7 +41,7 @@ def main():
     else:
         raise Exception("User must specify either --coords or --zip")
 
-    json_str = urlopen(api_url).read()
+    json_str = urlopen(api_url).read().decode()
     json_dict = json.loads(json_str)
     weekday = datetime.datetime.today().weekday()
 
