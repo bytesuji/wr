@@ -2,6 +2,8 @@ import os
 import sys
 import json
 import datetime
+import colorama 
+from colorama import Style
 from urllib.request import urlopen
 
 import joblib
@@ -11,6 +13,8 @@ API_URL_COORD = \
     'http://api.openweathermap.org/data/2.5/forecast/daily?lat={}&lon={}&cnt=10&APPID=a42e83259c77ea994ccc6891cdf13525'
 API_URL_ZIP = \
     'http://api.openweathermap.org/data/2.5/forecast/daily?zip={},us&APPID=a42e83259c77ea994ccc6891cdf13525'
+
+colorama.init()
 
 
 def main():
@@ -37,7 +41,8 @@ def main():
     json_dict = json.loads(json_str)
     weekday = datetime.datetime.today().weekday()
 
-    expl_string = "Weekday    │ Temp  │ Info"
+    expl_string = Style.BRIGHT + "Weekday" + Style.RESET_ALL + "    │ " + Style.BRIGHT + \
+        "Temp" + Style.RESET_ALL + "  │ " + Style.BRIGHT + "Info" + Style.RESET_ALL
     print()
     print(expl_string)
     for i, day in zip(range(7), json_dict['list']):
@@ -49,9 +54,8 @@ def main():
 
         temp_string = temp_colorizer(conv_temp) + "°" + (' ' * (5 - len(str(conv_temp)))) + '│ '
 
-        print('─' * 11, '┼', '─' * 7, '┼', '─' * 27, sep='')
+        print('─' * 11, '┼', '─' * 7, '┼', '─' * 23, sep='')
         print(date_indexer((weekday + i) % 6), temp_string + description)
-    print('─' * 11, '┴', '─' * 7, '┴', '─' * 27, sep='')
     print()
 
 
