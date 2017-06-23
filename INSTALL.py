@@ -8,6 +8,15 @@ class PrivilegeException(Exception):
     def __str__(self):
         return str(self.paramater)
 
+PIP_STRING = \
+"""pip must be installed for this script to function!
+
+debian-based:   apt install python3-pip
+arch-based:     pacman -S python-pip
+redhat-based:   yum install python-pip
+
+If not listed, check your favorite search engine."""
+
 
 def install(package):
     pip.main(['install', package])
@@ -24,7 +33,7 @@ def main():
         try: 
             import pip
         except ImportError:
-            print("pip must be installed for this script to function.")
+            print(PIP_STRING)
             exit(-1)
         print("Required module [colorama] was not found. Installing via pip.")
         install('colorama')
