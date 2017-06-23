@@ -19,10 +19,6 @@ redhat-based:   yum install python-pip
 If not listed, check your favorite search engine."""
 
 
-def install(package):
-    pip.main(['install', package])
-
-
 def main():
     if os.geteuid() is not 0:
         raise PrivilegeException("You must have root privileges to run this install script.")
@@ -39,6 +35,10 @@ def main():
         except ImportError:
             print(PIP_STRING)
             exit(-1)
+
+        def install(package):
+            pip.main(['install', package])
+
         print("Required module [colorama] was not found. Installing via pip.")
         install('colorama')
 
