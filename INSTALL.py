@@ -1,4 +1,5 @@
 import os
+import sys
 from shutil import copy2
 
 
@@ -25,6 +26,9 @@ def install(package):
 def main():
     if os.geteuid() is not 0:
         raise PrivilegeException("You must have root privileges to run this install script.")
+    if sys.version_info[0] < 3:
+        raise "Script must be run with python 3"
+        exit(-1)
 
     print("Checking dependencies...")
     try:
