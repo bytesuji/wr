@@ -1,5 +1,4 @@
 import os
-import pip
 from shutil import copy2
 
 
@@ -22,6 +21,11 @@ def main():
     try:
         import colorama
     except ImportError:
+        try: 
+            import pip
+        except ImportError:
+            print("pip must be installed for this script to function.")
+            exit(-1)
         print("Required module [colorama] was not found. Installing via pip.")
         install('colorama')
 
