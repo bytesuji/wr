@@ -16,11 +16,14 @@ from auxiliary import *
 colorama.init()
 
 help_string = """
+The wr command collects a weather report from OpenWeatherMap and prints it to the terminal in a concise format. 
+Users can modify the behavior of the program with the following flags:
+
 -f            displays temps in fahrenheit
 --today       displays the three-hourly forecast for the day
 --zip         specifiy location with ZIP code
 --coords      or with lat/lon
---save        saves the location and forecast type specified so you don't have to enter it again
+--save        saves the location specified so you don't have to enter it again
 --show-loc    shows the name of the city along with the weather report
 """
 
