@@ -84,7 +84,7 @@ def generate_url(forecast=Weather.DAILY):
     homedir = os.path.expanduser('~')
     wrrc = homedir + '/.wrrc'
 
-    if forecast is Weather.DAILY:
+    if forecast == Weather.DAILY:
         if '--coords' in sys.argv:
             (lat, lon) = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
             api_url = API_URL_COORD.format(lat, lon)
@@ -101,7 +101,7 @@ def generate_url(forecast=Weather.DAILY):
             print("Error: User must specify either --zip or --coords!")
             exit(-1)
 
-    elif forecast is Weather.HOURLY:
+    elif forecast == Weather.HOURLY:
         if '--coords' in sys.argv:
             (lat, lon) = (sys.argv[sys.argv.index('--coords') + 1], sys.argv[sys.argv.index('--coords') + 2])
             api_url = API_URL_HOURLY_COORD.format(lat, lon)
