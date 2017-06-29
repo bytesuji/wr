@@ -1,6 +1,7 @@
 import os
 import sys
 from shutil import copy2
+from shutil import rmtree
 
 
 class PrivilegeException(Exception):
@@ -43,13 +44,20 @@ def main():
 
     print("Copying files...")
     path = '/opt/wr'
+    if os.path.exists(path):
+        rmtree(path)
+
     os.mkdir(path)
-    copy2('./main.py', path)
-    copy2('./joblib.py', path)
-    copy2('./auxiliary.py', path)
+    file_queue = ['./main.py', './joblib.py', './auxiliary.py']
+    for file in file_queue:
+        copy2(file, path)
 
     print("Creating symlink...")
+    try: os.remove('/usr/local/bin/wr')
+    except:
+        pass
     os.symlink('/opt/wr/main.py', '/usr/local/bin/wr')
+
     print("Successfully installed!")
 
 
