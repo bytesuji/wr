@@ -61,13 +61,13 @@ def temp_colorizer(temp, units='C'):
 def date_indexer(day_num):
     # returns strigns which are all the same width
     day_names = [
+        "Sunday     │",
         "Monday     │",
         "Tuesday    │",
         "Wednesday  │",
         "Thursday   │",
         "Friday     │",
-        "Saturday   │",
-        "Sunday     │"
+        "Saturday   │"
     ]
     return day_names[day_num]
 
