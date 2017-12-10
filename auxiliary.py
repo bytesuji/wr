@@ -69,7 +69,7 @@ def date_indexer(day_num):
         "Friday     │",
         "Saturday   │"
     ]
-    return day_names[day_num]
+    return day_names[(day_num + 1) % 7]
 
 
 def load_settings():

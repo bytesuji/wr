@@ -5,7 +5,7 @@ import os
 import sys
 import json
 import datetime
-import colorama 
+import colorama
 from colorama import Style
 from urllib.request import urlopen
 
@@ -16,7 +16,7 @@ from auxiliary import *
 colorama.init()
 
 help_string = """
-The wr command collects a weather report from OpenWeatherMap and prints it to the terminal in a concise format. 
+The wr command collects a weather report from OpenWeatherMap and prints it to the terminal in a concise format.
 Users can modify the behavior of the program with the following flags:
 
 -f			  displays temps in fahrenheit
@@ -51,7 +51,7 @@ def default():
 			conv_temp = convert_kelvin(k_temp, 'f')
 		else:
 			conv_temp = convert_kelvin(k_temp)
-			
+
 		description = day['weather'][0]['description']
 		description = description[0].upper() + description[1:]
 

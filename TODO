@@ -1,0 +1,11 @@
+~ wr --current 
+    ~ returns current weather
+    ~ cache and check to see if it's been >15 min since last call to prevent excessive calls
+
+~ wr
+    ~ --current (self-explanatory)
+    ~ --astro will return a description of the night's sky forecast
+        ~ could get this data elsewhere if necessary
+    ~ --no-color
+~ man page 
+~ help string
